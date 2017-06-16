@@ -10,6 +10,7 @@ import freemarker.template.Version;
 import logica.Articulo;
 import logica.DataBaseServices;
 import logica.H2Services;
+import logica.Usuario;
 import spark.Spark;
 
 import java.io.StringWriter;
@@ -17,6 +18,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static spark.Spark.staticFileLocation;
 import static spark.Spark.staticFiles;
@@ -46,12 +49,42 @@ public class Main {
                 Template formTemplate = configuration.getTemplate("templates/index.ftl");
                 Map<String, Object> map = new HashMap<>();
                 map.put("ListaArticulos", allArticulos);
+                map.put("login", "false");
                 formTemplate.process(map, writer);
             } catch (Exception e) {
                 System.out.println(e.toString());
                 e.printStackTrace();
                 Spark.halt(500);
             }
+            return writer;
+        });
+
+        Spark.get("/login/", (request, response) -> {
+            StringWriter writer = new StringWriter();
+            List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
+            try {
+                String username = request.queryParams("username") != null ? request.queryParams("username") : "anonymous";
+                String password = request.queryParams("password") != null ? request.queryParams("password") : "unknown";
+
+                List<Usuario> result = allUsuarios.stream()
+                        .filter(item -> item.getUsername().equals(username))
+                        .filter(item -> item.getPassword().equals(password))
+                      //  .filter(a -> Objects.equals(a.ge, "three"))
+                        .collect(Collectors.toList());
+
+                if(result.isEmpty()){
+                    System.out.println("NINGUN USUARIO CON ESA COBINACION DE PARAMETROS ");
+                }
+                else
+                {
+                    System.out.println("LOGEADO CON EXITO");
+                }
+
+            } catch (Exception e) {
+
+            }
+
+
             return writer;
         });
 

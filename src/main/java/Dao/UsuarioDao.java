@@ -50,6 +50,8 @@ public class UsuarioDao {
         }
     }
 
+
+
     public void crearDataDemo() {
         // String sql = "insert into estudiante (matricula, nombre) values(:matricula,:nombre)";
         String sql = "INSERT INTO USER(USERNAME, NOMBRE, PASSWORD,ADMINISTRADOR, AUTOR)"

@@ -43,23 +43,25 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
+            <#if login == "true">
                 <li>
                     <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
                 </li>
+            </#if>
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;" >Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" action="">
+                        <form class="modal-content animate" action="/login/">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                                 <img src="/img/img_avatar2.png" alt="Avatar" class="avatar">
                             </div>
                             <div class="container2">
                                 <label><span class="glyphicon glyphicon-user"></span><b> Username:</b></label>
-                                <input type="text"  name="uname" required/>
+                                <input type="text"  name="username" required/>
 
                                 <label><span class="glyphicon glyphicon-eye-open"></span><b> Password:</b></label>
-                                <input type="password"  name="psw" required/>
+                                <input type="password"  name="password" required/>
 
                             </div>
                             <div class="container2" style="background-color:#f1f1f1">
@@ -128,7 +130,6 @@
                 by <a href="index.php">${articulo.autor}</a>
             </p>
             <p><span class="glyphicon glyphicon-time"></span> Posted on ${articulo.fecha}</p>
-            <hr>
             <p>${articulo.cuerpo}</p>
             <a class="btn btn-primary" href="#">Leer mas <span class="glyphicon glyphicon-chevron-right"></span></a>
 

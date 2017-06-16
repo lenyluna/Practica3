@@ -10,12 +10,12 @@ public class Articulo {
     private long id;
     private String titulo;
     private String cuerpo;
-    private Usuario autor;
-    private Date fecha;
+    private String autor;
+    private String fecha;
     private ArrayList<Comentario> listaComentarios;
     private ArrayList<Etiqueta> listaEtiqueta;
 
-    public Articulo(long id, String titulo, String cuerpo, Usuario autor, Date fecha) {
+    public Articulo(long id, String titulo, String cuerpo, String autor, String fecha) {
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -57,19 +57,19 @@ public class Articulo {
         this.cuerpo = cuerpo;
     }
 
-    public Usuario getAutor() {
+    public String getAutor() {
         return autor;
     }
 
-    public void setAutor(Usuario autor) {
+    public void setAutor(String autor) {
         this.autor = autor;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 }

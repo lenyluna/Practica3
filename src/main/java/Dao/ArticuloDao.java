@@ -54,6 +54,10 @@ public class ArticuloDao {
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Articulo.class);
         }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void crearDataDemo() {
