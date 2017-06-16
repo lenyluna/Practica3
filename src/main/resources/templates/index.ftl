@@ -51,7 +51,7 @@
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" action="/login/">
+                        <form class="modal-content animate" method="post" action="/login/">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close"
                                       title="Close Modal">&times;</span>
@@ -83,7 +83,7 @@
                     <a onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Sign up</a>
                     <div id="id02" class="modal">
 
-                        <form class="modal-content animate" action="/signup/">
+                        <form class="modal-content animate" method="post" action="/signup/">
                             <span onclick="document.getElementById('id02').style.display='none'" class="close"
                                   title="Close Modal">&times;</span>
                             <div class="container2">
