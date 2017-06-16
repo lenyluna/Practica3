@@ -5,11 +5,11 @@ package logica;
  */
 public class Etiqueta {
     private long id;
-    private String etiqueta;
+    private String nombre;
 
     public Etiqueta(long id, String etiqueta) {
         this.id = id;
-        this.etiqueta = etiqueta;
+        this.nombre = etiqueta;
     }
 
     public long getId() {
@@ -21,10 +21,10 @@ public class Etiqueta {
     }
 
     public String getEtiqueta() {
-        return etiqueta;
+        return nombre;
     }
 
     public void setEtiqueta(String etiqueta) {
-        this.etiqueta = etiqueta;
+        this.nombre = etiqueta;
     }
 }

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ULTRA BLOG</title>
+    <title>Luna's Blog Home</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +17,6 @@
     <!-- Custom CSS -->
     <link href="/css/blog-home.css" rel="stylesheet">
     <link href="/css/myCSS.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -30,9 +29,10 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
-
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
-           <p style="color: white;  padding-top: 15px; font-size: medium;">ULTRA BLOG</p>
+           <p style="color: white;  padding-top: 15px; font-size: medium;">Luna's blog</p>
         </div>
 
 
@@ -41,7 +41,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/index">Home</a>
                 </li>
                 <li>
                     <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
@@ -114,30 +114,81 @@
         <div class="col-md-8">
 
             <h1 class="page-header">
-                Entradas
-                <small>Todas las entradas del blog hasta la fecha</small>
+                Page Heading
+                <small>Secondary Text</small>
             </h1>
 
-
-<#list ListaArticulos as articulo>
             <!-- First Blog Post -->
             <h2>
-                <a href="#">${articulo.titulo}</a>
+                <a href="#">Blog Post Title</a>
             </h2>
             <p class="lead">
-                by <a href="index.php">${articulo.autor}</a>
+                by <a href="index.php">Start Bootstrap</a>
             </p>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on ${articulo.fecha}</p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
             <hr>
-            <p>${articulo.cuerpo}</p>
-            <a class="btn btn-primary" href="#">Leer mas <span class="glyphicon glyphicon-chevron-right"></span></a>
+            <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
+            <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
             <hr>
-</#list>
+
+            <!-- Second Blog Post -->
+            <h2>
+                <a href="#">Blog Post Title</a>
+            </h2>
+            <p class="lead">
+                by <a href="index.php">Start Bootstrap</a>
+            </p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
+            <hr>
+            <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, quasi, fugiat, asperiores harum voluptatum tenetur a possimus nesciunt quod accusamus saepe tempora ipsam distinctio minima dolorum perferendis labore impedit voluptates!</p>
+            <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+            <hr>
+
+            <!-- Third Blog Post -->
+            <h2>
+                <a href="#">Blog Post Title</a>
+            </h2>
+            <p class="lead">
+                by <a href="index.php">Start Bootstrap</a>
+            </p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
+            <hr>
+            <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione.</p>
+            <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+            <hr>
+
+            <!-- Pager -->
+            <ul class="pager">
+                <li class="previous">
+                    <a href="#">&larr; Older</a>
+                </li>
+                <li class="next">
+                    <a href="#">Newer &rarr;</a>
+                </li>
+            </ul>
 
         </div>
 
+        <!-- Blog Sidebar Widgets Column -->
+        <div class="col-md-4" style="margin-top: 50px ;>
 
+
+            <!-- Side Widget Well -->
+            <div class="well" >
+                <h4>Side Widget Well</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
+            </div>
+
+        </div>
 
     </div>
     <!-- /.row -->
@@ -148,7 +199,7 @@
     <footer>
         <div class="row" align="center">
             <div class="col-lg-12">
-                <p>Copyright &copy;</p>
+                <p>Copyright &copy; Your Website 2014</p>
             </div>
             <!-- /.col-lg-12 -->
         </div>

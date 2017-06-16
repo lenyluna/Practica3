@@ -15,5 +15,7 @@ dependencies {
     compile 'com.sparkjava:spark-debug-tools:0.5'
     compile 'com.sparkjava:spark-template-freemarker:2.5.5'
     compile 'org.freemarker:freemarker:2.3.26-incubating'
-    compile 'com.h2database:h2:1.4.191'
+    compile group: 'org.sql2o', name: 'sql2o', version: '1.5.4'
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    compile group: 'com.h2database', name: 'h2', version: '1.4.194'
 }
