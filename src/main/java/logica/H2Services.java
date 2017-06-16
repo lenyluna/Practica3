@@ -2,7 +2,9 @@ package logica;
 
 import org.h2.tools.Server;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by Leny96 on 15/6/2017.
@@ -22,7 +24,7 @@ public class H2Services {
         Server.shutdownTcpServer("tcp://localhost:9092","",true,true);
     }
 
-    public static void crearTablas(){
+    public static void crearTablas() throws SQLException {
         String sqlUser = "CREATE TABLE IF NOT EXISTS USER\n" +
                 "(USERNAME VARCHAR(30) PRIMARY KEY NOT NULL,\n"+
                 " NOMBRE VARCHAR(100) NOT NULL,\n" +
@@ -53,6 +55,15 @@ public class H2Services {
         String sqlAdminUser= "INSERT INTO USER(USERNAME, NOMBRE, PASSWORD,ADMINISTRADOR, AUTOR)"
                 + "VALUES('lenyluna','administrador','admin',TRUE,TRUE);";
 
-
+        Connection con = DataBaseServices.getInstancia().getConexion();
+        Statement stat = con.createStatement();
+        stat.execute(sqlUser);
+        stat.execute(sqlArticle);
+        stat.execute(sqlComment);
+        stat.execute(sqlTag );
+        stat.execute(sqlTagArticulo);
+        stat.execute(sqlAdminUser);
+        stat.close();
+        con.close();
     }
 }

@@ -1,5 +1,10 @@
 package main;
 
+import logica.DataBaseServices;
+import logica.H2Services;
+
+import java.sql.SQLException;
+
 import static spark.Spark.staticFiles;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
@@ -11,7 +16,22 @@ public class Main {
         staticFiles.location("/publico");
 
         enableDebugScreen();
+        try {
+            H2Services.startDb();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        DataBaseServices.getInstancia().textConexion();
+        H2Services.crearTablas();
 
         new Templates().TempFreeMarker();
+
+
+        try {
+            H2Services.stopDb();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
