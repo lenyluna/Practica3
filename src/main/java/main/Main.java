@@ -67,14 +67,12 @@ public class Main {
                 List<Usuario> result = allUsuarios.stream()
                         .filter(item -> item.getUsername().equals(username))
                         .filter(item -> item.getPassword().equals(password))
-                      //  .filter(a -> Objects.equals(a.ge, "three"))
+                        //  .filter(a -> Objects.equals(a.ge, "three"))
                         .collect(Collectors.toList());
 
-                if(result.isEmpty()){
+                if (result.isEmpty()) {
                     System.out.println("NINGUN USUARIO CON ESA COBINACION DE PARAMETROS ");
-                }
-                else
-                {
+                } else {
                     System.out.println("LOGEADO CON EXITO");
                     Template formTemplate = configuration.getTemplate("templates/index.ftl");
                     Map<String, Object> map = new HashMap<>();
@@ -85,8 +83,10 @@ public class Main {
 
                 }
 
-            } catch (Exception e) {
+                response.redirect("/");
 
+            } catch (Exception e) {
+                response.redirect("/");
             }
             return writer;
         });
@@ -103,19 +103,19 @@ public class Main {
                 String administrador = request.queryParams("administrador") != null ? request.queryParams("administrador") : "unknown";
                 String autor = request.queryParams("autor") != null ? request.queryParams("autor") : "unknown";
 
-                if (administrador.equals("on")){
+                if (administrador.equals("on")) {
                     adm = true;
                 }
-                if (autor.equals("on")){
+                if (autor.equals("on")) {
                     aut = true;
                 }
 
-                DBusuarios.createUsuario(new Usuario(username, nombre, password, adm,aut));
-
+                DBusuarios.createUsuario(new Usuario(username, nombre, password, adm, aut));
+                response.redirect("/");
                 System.out.println(administrador + " " + autor);
 
             } catch (Exception e) {
-
+                response.redirect("/");
             }
             return writer;
         });

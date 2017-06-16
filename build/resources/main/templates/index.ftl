@@ -51,7 +51,7 @@
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;" >Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" action="/login/">
+                        <form class="modal-content animate" method="post" action="/login/">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                                 <img src="/img/img_avatar2.png" alt="Avatar" class="avatar">
