@@ -8,22 +8,17 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.Version;
 import logica.Articulo;
-import logica.DataBaseServices;
-import logica.H2Services;
 import logica.Usuario;
 import spark.Spark;
 
 import java.io.StringWriter;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
-import static spark.Spark.staticFiles;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 /**
@@ -93,8 +88,35 @@ public class Main {
             } catch (Exception e) {
 
             }
+            return writer;
+        });
 
+        Spark.get("/signup/", (request, response) -> {
+            StringWriter writer = new StringWriter();
+            boolean adm = false;
+            boolean aut = false;
+            //List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
+            try {
+                String username = request.queryParams("username") != null ? request.queryParams("username") : "anonymous";
+                String password = request.queryParams("password") != null ? request.queryParams("password") : "unknown";
+                String nombre = request.queryParams("nombre") != null ? request.queryParams("nombre") : "unknown";
+                String administrador = request.queryParams("administrador") != null ? request.queryParams("administrador") : "unknown";
+                String autor = request.queryParams("autor") != null ? request.queryParams("autor") : "unknown";
 
+                if (administrador.equals("on")){
+                    adm = true;
+                }
+                if (autor.equals("on")){
+                    aut = true;
+                }
+
+                DBusuarios.createUsuario(new Usuario(username, nombre, password, adm,aut));
+
+                System.out.println(administrador + " " + autor);
+
+            } catch (Exception e) {
+
+            }
             return writer;
         });
 

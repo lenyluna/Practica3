@@ -51,7 +51,7 @@
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" action="/login/">
+                        <form class="modal-content animate" method="post" action="/login/">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close"
                                       title="Close Modal">&times;</span>
@@ -83,18 +83,18 @@
                     <a onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Sign up</a>
                     <div id="id02" class="modal">
 
-                        <form class="modal-content animate" action="">
+                        <form class="modal-content animate" method="post" action="/signup/">
                             <span onclick="document.getElementById('id02').style.display='none'" class="close"
                                   title="Close Modal">&times;</span>
                             <div class="container2">
                                 <label><b>Name:</b> </label>
                                 <input type="text" name="nombre" required/>
                                 <label><span class="glyphicon glyphicon-user"></span><b> Username: </b></label>
-                                <input type="text" name="usuario" required/>
+                                <input type="text" name="username" required/>
                                 <label><span class="glyphicon glyphicon-eye-open"></span><b> Password: </b></label>
-                                <input type="text" name="psw" required/>
+                                <input type="password" name="password" required/>
                                 <label><b>¿Es un usuario Admin?</b></label>
-                                <input type="checkbox" name="admin">
+                                <input type="checkbox" name="administrador">
                                 <label><b>¿Es un usuario autor?</b></label>
                                 <input type="checkbox" name="autor">
 

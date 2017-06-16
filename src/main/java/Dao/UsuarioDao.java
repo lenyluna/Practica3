@@ -50,6 +50,16 @@ public class UsuarioDao {
         }
     }
 
+    public void createUsuario(Usuario user) {
+
+        String sql = "INSERT INTO USER(USERNAME, NOMBRE, PASSWORD,ADMINISTRADOR, AUTOR)"
+                + "VALUES(:USERNAME,:NOMBRE,:PASSWORD,:ADMINISTRADOR,:AUTOR);";
+
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).bind(user
+            ).executeUpdate();
+        }
+    }
 
 
     public void crearDataDemo() {
