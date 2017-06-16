@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 import static spark.Spark.staticFiles;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -50,6 +51,7 @@ public class Main {
                 Map<String, Object> map = new HashMap<>();
                 map.put("ListaArticulos", allArticulos);
                 map.put("login", "false");
+                map.put("username","");
                 formTemplate.process(map, writer);
             } catch (Exception e) {
                 System.out.println(e.toString());
@@ -62,6 +64,7 @@ public class Main {
         Spark.get("/login/", (request, response) -> {
             StringWriter writer = new StringWriter();
             List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
+            List<Articulo> allArticulos = DBarticulos.getAllArticulos();
             try {
                 String username = request.queryParams("username") != null ? request.queryParams("username") : "anonymous";
                 String password = request.queryParams("password") != null ? request.queryParams("password") : "unknown";
@@ -78,6 +81,13 @@ public class Main {
                 else
                 {
                     System.out.println("LOGEADO CON EXITO");
+                    Template formTemplate = configuration.getTemplate("templates/index.ftl");
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("ListaArticulos", allArticulos);
+                    map.put("login", "false");
+                    map.put("username",username);
+                    formTemplate.process(map, writer);
+
                 }
 
             } catch (Exception e) {
@@ -88,5 +98,7 @@ public class Main {
             return writer;
         });
 
+
     }
+
 }

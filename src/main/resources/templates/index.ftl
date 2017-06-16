@@ -67,7 +67,7 @@
                             </div>
                             <div class="container2" style="background-color:#f1f1f1">
                                 <p align="center">
-                                    <button type="submit" class="btn btn-primary"><span
+                                   <button type="submit" class="btn btn-primary"><span
                                             class="glyphicon glyphicon-off"></span> Log In
                                     </button>
                                     <button type="button" onclick="document.getElementById('id01').style.display='none'"
@@ -113,6 +113,9 @@
                         </form>
 
                     </div>
+                </li>
+                <li>
+                    <p align="right">${username}</p>
                 </li>
             </ul>
         </div>
