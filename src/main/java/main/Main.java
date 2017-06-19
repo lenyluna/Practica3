@@ -46,7 +46,6 @@ public class Main {
                 Map<String, Object> map = new HashMap<>();
                 map.put("ListaArticulos", allArticulos);
                 map.put("login", "false");
-                map.put("username","");
                 formTemplate.process(map, writer);
             } catch (Exception e) {
                 System.out.println(e.toString());
@@ -56,7 +55,7 @@ public class Main {
             return writer;
         });
 
-        Spark.get("/login/", (request, response) -> {
+        Spark.post("/login/", (request, response) -> {
             StringWriter writer = new StringWriter();
             List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
             List<Articulo> allArticulos = DBarticulos.getAllArticulos();
@@ -77,7 +76,7 @@ public class Main {
                     Template formTemplate = configuration.getTemplate("templates/index.ftl");
                     Map<String, Object> map = new HashMap<>();
                     map.put("ListaArticulos", allArticulos);
-                    map.put("login", "false");
+                    map.put("login", "true");
                     map.put("username",username);
                     formTemplate.process(map, writer);
 

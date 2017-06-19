@@ -48,6 +48,7 @@
                     <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
+                <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
@@ -114,9 +115,13 @@
 
                     </div>
                 </li>
-                <li>
-                    <p align="right">${username}</p>
+                </#if>
+                <#if login == "true">
+                <li >
+                 <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/" style="color: white;"> log out</a> </b></p>
+
                 </li>
+                </#if>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
