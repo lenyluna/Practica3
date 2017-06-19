@@ -21,14 +21,17 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <p style="color: white;  padding-top: 15px; font-size: medium;">Luna's blog</p>
+                    <p style="color: white;  padding-top: 15px; font-size: medium;">ULTRA blog</p>
                 </li>
                 <li>
-                    <a href="/index">Home</a>
+                    <a href="/">Home</a>
                 </li>
-                <li>
-                    <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
-                </li>
+                <#if login == "true">
+                    <li>
+                        <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
+                    </li>
+                </#if>
+                <#if login =="false">
                 <li>
                 <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;" >Log in</a>
 
@@ -59,7 +62,7 @@
                     <a onclick="document.getElementById('id02').style.display='block'" style="width:auto;" >Sign up</a>
                     <div id="id02" class="modal">
 
-                        <form class="modal-content animate" action="">
+                        <form class="modal-content animate" action="/login/" method="post">
                             <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
                             <div class="container2">
                                 <label><b>Name:</b> </label>
@@ -83,6 +86,13 @@
 
                     </div>
                 </li>
+                </#if>
+                <#if login == "true">
+                    <li >
+                        <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
+
+                    </li>
+                </#if>
             </ul>
         </div>
     </div>
@@ -94,12 +104,12 @@
             </h1>
             <br/>
 
-            <form method="post" action="">
-               <input type="text" class="form-control" placeholder="Título"></input><br/>
-                <textarea class="form-control" rows="10" placeholder="Cuerpo" style="resize: none;"></textarea><br/>
-                <input type="text" class="form-control" placeholder="Etiquetas"></input><br/>
+            <form method="post" action="/articulo">
+               <input type="text" class="form-control" placeholder="Título" name="titulo"></input><br/>
+                <textarea class="form-control" rows="10" placeholder="Cuerpo" style="resize: none;" name="cuerpo"></textarea><br/>
+                <input type="text" class="form-control" placeholder="Etiquetas" name="etiqueta"></input><br/>
                  <p align="right">
-                     <button type="button" class="btn btn-primary" align="center"><span class="glyphicon glyphicon-send"></span> Send</button>
+                     <button type="submit" class="btn btn-primary" align="center"><span class="glyphicon glyphicon-send"></span> Send</button>
                      <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
                  </p>
             </form>

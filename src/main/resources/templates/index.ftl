@@ -45,7 +45,7 @@
                 </li>
             <#if login == "true">
                 <li>
-                    <a href="/nuevoArticulo" >Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
                 <#if login =="false">

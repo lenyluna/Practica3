@@ -1,7 +1,6 @@
 package logica;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Leny96 on 15/6/2017.
@@ -15,7 +14,7 @@ public class Articulo {
     private ArrayList<Comentario> listaComentarios;
     private ArrayList<Etiqueta> listaEtiqueta;
 
-    public Articulo(long id, String titulo, String cuerpo, String autor, String fecha) {
+    public Articulo(String titulo, String cuerpo, String autor, String fecha) {
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;

@@ -13,6 +13,8 @@ import spark.Request;
 import spark.Spark;
 
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class Main {
         configuration.setClassForTemplateLoading(Main.class, "/");
 
         Spark.get("/", (request, response) -> {
-            //checkCOOKIES(request);
+            checkCOOKIES(request);
             StringWriter writer = new StringWriter();
             List<Articulo> allArticulos = DBarticulos.getAllArticulos();
             try {
@@ -139,8 +141,48 @@ public class Main {
             return null;
         });
 
+        Spark.get("/CrearArticulo/:username",(request, response) -> {
+            StringWriter writer = new StringWriter();
+            String username = request.params("username");
+            Template formTemplate = configuration.getTemplate("templates/crearArticulo.ftl");
+            Map<String, Object> map = new HashMap<>();
+            map.put("username",username);
+            map.put("login", "true");
+            formTemplate.process(map, writer);
+            return writer;
+        });
+
+        Spark.post("/articulo",(request, response) -> {
+            String titulo = request.queryParams("titulo");
+            String cuerpo = request.queryParams("cuerpo");
+            Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
+           // String etiqueta = request.queryParams("etiqueta");
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+            Articulo yuca = new Articulo(titulo, cuerpo, user.getUsername(), "89880");
+            System.out.println(yuca.getAutor() +" "+ yuca.getFecha() +" "+ yuca.getTitulo());
+            try {
+
+                DBarticulos.createArticulo(yuca);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            response.redirect("/");
+            return null;
+        });
 
     }
+    private static void checkCOOKIES(Request req) {
+        if (req.session().attribute(SESSION_NAME) == null) {
+            Map<String, String> cookies = req.cookies();
+            if (cookies.containsKey(COOKIE_NAME)) {
+                System.out.println("que lo que con que lo que ");
+                System.out.println("COOKIE ENCONTRADA" + cookies.get(COOKIE_NAME));
+                req.session().attribute(SESSION_NAME, cookies.get(COOKIE_NAME));
+            }
+        }
+    }
+
 
     private static Usuario finUser(String username, UsuarioDao DBusuarios){
         List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
