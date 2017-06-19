@@ -20,7 +20,7 @@
 
 </head>
 
-<body>
+<body onload="document.getElementById('id01').style.display='block'">
 
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -48,7 +48,7 @@
                     <a href="/nuevoArticulo" >Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
-                <#if login =="false">
+            <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
@@ -59,16 +59,24 @@
                                 <img src="/img/img_avatar2.png" alt="Avatar" class="avatar">
                             </div>
                             <div class="container2">
-                                <label><span class="glyphicon glyphicon-user"></span><b> Username:</b></label>
-                                <input type="text" name="username" required/>
+                                <#if cargando == "true">
+                                    <div class="alert alert-danger">El usuario o contraseña es incorrecta</div>
+                                    <label><span class="glyphicon glyphicon-user"></span><b> Username:</b></label>
+                                    <input type="text" name="username" value="${username}" required/>
 
-                                <label><span class="glyphicon glyphicon-eye-open"></span><b> Password:</b></label>
-                                <input type="password" name="password" required/>
+                                    <label><span class="glyphicon glyphicon-eye-open"></span><b> Password:</b></label>
+                                    <input type="password" name="password"  required/>
+                                <#else>
+                                    <label><span class="glyphicon glyphicon-user"></span><b> Username:</b></label>
+                                    <input type="text" name="username" required/>
 
+                                    <label><span class="glyphicon glyphicon-eye-open"></span><b> Password:</b></label>
+                                    <input type="password" name="password" required/>
+                                </#if>
                             </div>
                             <div class="container2" style="background-color:#f1f1f1">
                                 <p align="center">
-                                   <button type="submit" class="btn btn-primary"><span
+                                    <button type="submit" class="btn btn-primary"><span
                                             class="glyphicon glyphicon-off"></span> Log In
                                     </button>
                                     <button type="button" onclick="document.getElementById('id01').style.display='none'"
@@ -115,13 +123,13 @@
 
                     </div>
                 </li>
-                </#if>
-                <#if login == "true">
+            </#if>
+            <#if login == "true">
                 <li >
-                 <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
+                    <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/" style="color: white;"> log out</a> </b></p>
 
                 </li>
-                </#if>
+            </#if>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
