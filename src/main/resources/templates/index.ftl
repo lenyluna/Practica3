@@ -45,7 +45,7 @@
                 </li>
             <#if login == "true">
                 <li>
-                    <a href="/nuevoArticulo">Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
                 <#if login =="false">
@@ -118,7 +118,7 @@
                 </#if>
                 <#if login == "true">
                 <li >
-                 <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/" style="color: white;"> log out</a> </b></p>
+                 <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
 
                 </li>
                 </#if>
@@ -176,7 +176,6 @@
         </div>
         <!-- /.row -->
     </footer>
-
 </div>
 <!-- jQuery-->
 <script src="/js/jquery.js"></script>

@@ -60,6 +60,19 @@ public class ArticuloDao {
         }
     }
 
+    public void createArticulo(Articulo art){
+        String sql = "INSERT INTO ARTICULOS(ID,TITULO,CUERPO,AUTOR,FECHA) VALUES(:ID,:TITULO,:CUERPO,:AUTOR,:FECHA)";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                   // .addParameter("ID",)
+                    .addParameter("TITULO",art.getTitulo())
+                    .addParameter("CUERPO",art.getCuerpo())
+                    .addParameter("AUTOR",art.getAutor() )
+                    .addParameter("FECHA",art.getFecha())
+                    .executeUpdate();
+        }
+    }
+
     public void crearDataDemo() {
         String sql = "insert into ARTICULOS (TITULO, CUERPO, AUTOR, FECHA) values(:TITULO, :CUERPO, :AUTOR, :FECHA)";
         try (Connection con = sql2o.open()) {
