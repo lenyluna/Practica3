@@ -13,10 +13,7 @@ import spark.Spark;
 
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static spark.Spark.get;
@@ -38,7 +35,6 @@ public class Main {
     //http://localhost:4567
     public static void main(String[] args) {
 
-       List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
         staticFileLocation("/publico");
         final Configuration configuration = new Configuration(new Version(2, 3, 0));
         configuration.setClassForTemplateLoading(Main.class, "/");
@@ -47,7 +43,8 @@ public class Main {
             checkCOOKIES(request);
             StringWriter writer = new StringWriter();
             List<Articulo> allArticulos = DBarticulos.getAllArticulos();
-           // System.out.println("papo"+allArticulos.get(0).getListaEtiqueta().get(0));
+            loadRelacion(allArticulos);
+            System.out.println("prueba"+allArticulos.get(2).getListaEtiqueta().size());
             try {
                 Template formTemplate = configuration.getTemplate("templates/index.ftl");
                 Map<String, Object> map = new HashMap<>();
@@ -180,9 +177,9 @@ public class Main {
             try {
                 DBarticulos.createArticulo(art);
                 art.setId(DBarticulos.lastArt());
-               /*for(Etiqueta et : art.getListaEtiqueta()){
+               for(Etiqueta et : art.getListaEtiqueta()){
                     DBartEti.createRelacion(et.getId(),art.getId());
-                }*/
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -221,6 +218,30 @@ public class Main {
         }
        return null;
     }
+
+    private static Etiqueta findEtiById (long id){
+        for (Etiqueta et: DBetiqueta.getAllEtiquetas()) {
+            if(et.getId()==id){
+                return et;
+            }
+        }
+        return null;
+    }
+
+    private  static void loadRelacion (List<Articulo> allArticulos){
+        List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
+        for (Articulo art: allArticulos) {
+            art.setListaEtiqueta(new ArrayList<Etiqueta>());
+            for (RelacionEti_Art rel : allRelacion) {
+                if(rel.getId_Art()==art.getId()){
+                    art.getListaEtiqueta().add(findEtiById(rel.getId_Eti()));
+                }
+            }
+
+        }
+    }
+
+
 
 
 

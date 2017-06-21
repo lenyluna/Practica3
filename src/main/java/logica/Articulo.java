@@ -78,5 +78,6 @@ public class Articulo {
             listaEtiqueta.add(et);
 
     }
+
 }
 

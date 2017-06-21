@@ -19,7 +19,9 @@ public class ArticuloDaoEtiqueta{
         this.sql2o = new Sql2o("jdbc:h2:~/blog", "root", "");
         crearTabla();
         cargaDemo();
+       // guardaRelacion ();
     }
+
 
     private void crearTabla() {
         String sql = "CREATE TABLE IF NOT EXISTS ETIQUETA_ART"+
