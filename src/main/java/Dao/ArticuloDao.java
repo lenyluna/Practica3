@@ -61,7 +61,7 @@ public class ArticuloDao {
     }
 
     public void createArticulo(Articulo art){
-        String sql = "INSERT INTO ARTICULOS(ID,TITULO,CUERPO,AUTOR,FECHA) VALUES(:ID,:TITULO,:CUERPO,:AUTOR,:FECHA)";
+        String sql = "INSERT INTO ARTICULOS(TITULO,CUERPO,AUTOR,FECHA) VALUES(:TITULO,:CUERPO,:AUTOR,:FECHA)";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                    // .addParameter("ID",)
@@ -91,5 +91,9 @@ public class ArticuloDao {
                     .addParameter("FECHA", "16/06/2017")
                     .executeUpdate();
         }
+    }
+    public long lastArt(){
+        long id=getAllArticulos().get(getAllArticulos().size()-1).getId();
+        return id;
     }
 }

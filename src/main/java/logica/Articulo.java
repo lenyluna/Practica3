@@ -27,7 +27,9 @@ public class Articulo {
     public ArrayList<Comentario> getListaComentarios() {
         return listaComentarios;
     }
-
+    public void setListaEtiqueta(ArrayList<Etiqueta> listaEtiqueta) {
+        this.listaEtiqueta = listaEtiqueta;
+    }
     public ArrayList<Etiqueta> getListaEtiqueta() {
         return listaEtiqueta;
     }
@@ -71,4 +73,10 @@ public class Articulo {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
+    public void addEtiqueta(Etiqueta et){
+            listaEtiqueta.add(et);
+
+    }
 }
+

@@ -27,4 +27,5 @@ public class Etiqueta {
     public void setEtiqueta(String etiqueta) {
         this.nombre = etiqueta;
     }
+
 }

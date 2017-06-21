@@ -60,4 +60,17 @@ public class EtiquetaDao {
                     .executeUpdate();
         }
     }
+    public  void crearEtiqueta(String name){
+        String sql = "insert into ETIQUETAS (NOMBRE) values(:name)";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("name",name)
+                    .executeUpdate();
+        }
+    }
+
+    public long lastEtiq(){
+        long id=getAllEtiquetas().get(getAllEtiquetas().size()-1).getId();
+        return id;
+    }
 }

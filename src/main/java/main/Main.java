@@ -1,13 +1,12 @@
 package main;
 
-import Dao.ArticuloDao;
-import Dao.ComenterioDao;
-import Dao.EtiquetaDao;
-import Dao.UsuarioDao;
+import Dao.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.Version;
 import logica.Articulo;
+import logica.Etiqueta;
+import logica.RelacionEti_Art;
 import logica.Usuario;
 import spark.Request;
 import spark.Spark;
@@ -30,16 +29,16 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 public class Main {
     private static final String COOKIE_NAME = "user_cookies" ;
     private static String SESSION_NAME= "username";
-
+    static UsuarioDao DBusuarios = new UsuarioDao();
+    static EtiquetaDao DBetiqueta = new EtiquetaDao();
+    static ArticuloDao DBarticulos = new ArticuloDao();
+    static ComenterioDao DBcomentario = new ComenterioDao();
+    //static ArticuloDaoEtiqueta DBartEti = new ArticuloDaoEtiqueta();
 
     //http://localhost:4567
     public static void main(String[] args) {
-        UsuarioDao DBusuarios = new UsuarioDao();
-        EtiquetaDao DBetiqueta = new EtiquetaDao();
-        ArticuloDao DBarticulos = new ArticuloDao();
-        ComenterioDao DBcomentario = new ComenterioDao();
 
-
+       //List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
         staticFileLocation("/publico");
         final Configuration configuration = new Configuration(new Version(2, 3, 0));
         configuration.setClassForTemplateLoading(Main.class, "/");
@@ -48,6 +47,7 @@ public class Main {
             checkCOOKIES(request);
             StringWriter writer = new StringWriter();
             List<Articulo> allArticulos = DBarticulos.getAllArticulos();
+           // System.out.println("papo"+allArticulos.get(0).getListaEtiqueta().get(0));
             try {
                 Template formTemplate = configuration.getTemplate("templates/index.ftl");
                 Map<String, Object> map = new HashMap<>();
@@ -65,7 +65,7 @@ public class Main {
                 System.out.println(e.toString());
                 e.printStackTrace();
                 Spark.halt(500);
-            }// locooooo
+            }
             return writer;
         });
 
@@ -152,18 +152,37 @@ public class Main {
             return writer;
         });
 
-        Spark.post("/articulo",(request, response) -> {
+        Spark.post("/guardandoarticulo",(request, response) -> {
+            List<Articulo> allArticulos = DBarticulos.getAllArticulos();
             String titulo = request.queryParams("titulo");
             String cuerpo = request.queryParams("cuerpo");
             Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
-           // String etiqueta = request.queryParams("etiqueta");
             Date date = new Date();
             SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
-            Articulo yuca = new Articulo(titulo, cuerpo, user.getUsername(), "89880");
-            System.out.println(yuca.getAutor() +" "+ yuca.getFecha() +" "+ yuca.getTitulo());
-            try {
+            Articulo art = new Articulo(titulo, cuerpo, user.getUsername(),format.format(date).toString());
+            String etiqueta[] = request.queryParams("etiqueta").split(",");
 
-                DBarticulos.createArticulo(yuca);
+           for(int i=0;i<etiqueta.length;i++){
+                Etiqueta et = findEtiqueta(etiqueta[i]);
+                if(et==null){
+                    Etiqueta et2 = new Etiqueta(-1,etiqueta[i]);
+                    try {
+                        DBetiqueta.crearEtiqueta(et2.getEtiqueta());
+                        et2.setId(DBetiqueta.lastEtiq());
+                        art.addEtiqueta(et2);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else {
+                    art.addEtiqueta(et);
+                }
+            }
+            try {
+                DBarticulos.createArticulo(art);
+                art.setId(DBarticulos.lastArt());
+               /*for(Etiqueta et : art.getListaEtiqueta()){
+                    DBartEti.createRelacion(et.getId(),art.getId());
+                }*/
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -193,4 +212,16 @@ public class Main {
         }
         return null;
     }
+
+    private static Etiqueta findEtiqueta(String name){
+        for (Etiqueta et: DBetiqueta.getAllEtiquetas()) {
+            if(et.getEtiqueta().equalsIgnoreCase(name)){
+                return et;
+            }
+        }
+       return null;
+    }
+
+
+
 }

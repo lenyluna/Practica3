@@ -104,7 +104,7 @@
             </h1>
             <br/>
 
-            <form method="post" action="/articulo">
+            <form method="post" action="/guardandoarticulo">
                <input type="text" class="form-control" placeholder="Título" name="titulo"></input><br/>
                 <textarea class="form-control" rows="10" placeholder="Cuerpo" style="resize: none;" name="cuerpo"></textarea><br/>
                 <input type="text" class="form-control" placeholder="Etiquetas" name="etiqueta"></input><br/>
