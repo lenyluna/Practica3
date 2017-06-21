@@ -33,12 +33,12 @@ public class Main {
     static EtiquetaDao DBetiqueta = new EtiquetaDao();
     static ArticuloDao DBarticulos = new ArticuloDao();
     static ComenterioDao DBcomentario = new ComenterioDao();
-    //static ArticuloDaoEtiqueta DBartEti = new ArticuloDaoEtiqueta();
+    static ArticuloDaoEtiqueta DBartEti = new ArticuloDaoEtiqueta();
 
     //http://localhost:4567
     public static void main(String[] args) {
 
-       //List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
+       List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
         staticFileLocation("/publico");
         final Configuration configuration = new Configuration(new Version(2, 3, 0));
         configuration.setClassForTemplateLoading(Main.class, "/");

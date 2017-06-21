@@ -25,7 +25,7 @@ public class ArticuloDaoEtiqueta{
         String sql = "CREATE TABLE IF NOT EXISTS ETIQUETA_ART"+
                 "(ID INTEGER PRIMARY KEY  AUTO_INCREMENT NOT NULL," +
                 "ID_ART INTEGER NOT NULL, FOREIGN KEY (ID_ART) REFERENCES ARTICULOS(ID),"+
-                "ID_ETIQUETA INTEGER NOT NULL, FOREIGN KEY (ID_ETIQUETA) REFERENCES ETIQUETAS(ID)"+");";
+                "ID_ETI INTEGER NOT NULL, FOREIGN KEY (ID_ETI) REFERENCES ETIQUETAS(ID)"+");";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql).executeUpdate();
         }
@@ -39,17 +39,17 @@ public class ArticuloDaoEtiqueta{
     }
 
     private void crearDataDemo() {
-        String sql = "INSERT INTO ETIQUETA_ART(ID_ART,ID_ETIQUETA) VALUES(:ID_ART,:ID_ETIQUETA)";
+        String sql = "INSERT INTO ETIQUETA_ART(ID_ART,ID_ETI) VALUES(:ID_ART,:ID_ETI)";
         try (Connection con = sql2o.open()) {
 
             con.createQuery(sql)
                     .addParameter("ID_ART", 1)
-                    .addParameter("ID_ETIQUETA", 1)
+                    .addParameter("ID_ETI", 1)
                     .executeUpdate();
 
             con.createQuery(sql)
                     .addParameter("ID_ART", 2)
-                    .addParameter("ID_ETIQUETA", 2)
+                    .addParameter("ID_ETI", 2)
                     .executeUpdate();
         }
     }
@@ -64,11 +64,12 @@ public class ArticuloDaoEtiqueta{
         }
     }
 
+
     public void createRelacion(long idEti, long idArt){
-        String sql ="INSERT INTO ETIQUETA_ART(ID_ART,ID_ETIQUETA) VALUES (:ID_ART,:ID_ETIQUETA)";
+        String sql ="INSERT INTO ETIQUETA_ART(ID_ART,ID_ETI) VALUES (:ID_ART,:ID_ETI)";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
-                    .addParameter("ID_ETIQUETA",idEti)
+                    .addParameter("ID_ETI",idEti)
                     .addParameter("ID_ART",idArt)
                     .executeUpdate();
         }
