@@ -4,10 +4,7 @@ import Dao.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.Version;
-import logica.Articulo;
-import logica.Etiqueta;
-import logica.RelacionEti_Art;
-import logica.Usuario;
+import logica.*;
 import spark.Request;
 import spark.Spark;
 
@@ -17,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static spark.Spark.get;
+import static spark.Spark.redirect;
 import static spark.Spark.staticFileLocation;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
@@ -50,7 +48,7 @@ public class Main {
                 Collections.reverse(listArtClone);
                 map.put("ListaArticulos",listArtClone);
 
-                Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
+                Usuario user = finUser(request.session().attribute(SESSION_NAME));
                 if(user==null){
                     map.put("login", "false");
                 }else {
@@ -157,7 +155,7 @@ public class Main {
         Spark.post("/guardandoarticulo",(request, response) -> {
             String titulo = request.queryParams("titulo");
             String cuerpo = request.queryParams("cuerpo");
-            Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
             Date date = new Date();
             SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
             Articulo art = new Articulo(titulo, cuerpo, user.getUsername(),format.format(date).toString());
@@ -195,13 +193,14 @@ public class Main {
         Spark.get("/articulo/:id",(request, response) -> {
             StringWriter writer = new StringWriter();
             long id = Long.parseLong(request.params("id"));
-            Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
             Articulo art = findArtById(id);
             try{
                 Template formTemplate = configuration.getTemplate("templates/vistaArticulo.ftl");
             Map<String, Object> map = new HashMap<>();
             map.put("articulo",art);
             map.put("listEti",art.getListaEtiqueta());
+            map.put("listComent",art.getListaComentarios());
                 if(user==null){
                     map.put("login", "false");
                 }else {
@@ -215,8 +214,25 @@ public class Main {
             }
             return writer;
         });
+        Spark.post("/articulo/:id/comentario",(request, response) ->{
+            StringWriter writer = new StringWriter();
+            String comentario = request.queryParams("comentario");
+            long id = Long.parseLong(request.params("id"));
+            Articulo art =findArtById (id);
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            Comentario com = new Comentario(comentario,user,art);
+            art.addComentario(com);
+            try {
+                DBcomentario.createData(com);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            response.redirect("/articulo/"+id);
+            return null;
+        });
 
     }
+
     private static void checkCOOKIES(Request req) {
         if (req.session().attribute(SESSION_NAME) == null) {
             Map<String, String> cookies = req.cookies();
@@ -229,7 +245,7 @@ public class Main {
     }
 
 
-    private static Usuario finUser(String username, UsuarioDao DBusuarios){
+    private static Usuario finUser(String username){
         List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
         for(Usuario user: allUsuarios){
             if(user.getUsername().equalsIgnoreCase(username)){
@@ -261,17 +277,29 @@ public class Main {
         List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
         for (Articulo art: allArticulos) {
             art.setListaEtiqueta(new ArrayList<Etiqueta>());
+            art.setListaComentarios(new ArrayList<Comentario>());
             for (RelacionEti_Art rel : allRelacion) {
                 if(rel.getId_Art()==art.getId()){
                     art.getListaEtiqueta().add(findEtiById(rel.getId_Eti()));
                 }
             }
             art.setCuerpo70(caracter(art.getCuerpo()));
+            loadComentario(art);
             listArticulos.add(art);
-            System.out.println("tama;o"+listArticulos.size());
         }
     }
 
+    private static void loadComentario(Articulo art){
+      List<ComentarioDB> listComent = DBcomentario.getComentarioByArt(art.getId());
+        ArrayList<Comentario> allListComent = new ArrayList<>();
+        for (ComentarioDB comentDb: listComent) {
+            Comentario comen = new Comentario(comentDb.getComentario(),finUser(comentDb.getAutor()),art);
+            allListComent.add(comen);
+        }
+      for (Comentario coment: allListComent) {
+            art.addComentario(coment);
+        }
+    }
     private  static void loadRelacionByOne (Articulo art){
         List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
             art.setListaEtiqueta(new ArrayList<Etiqueta>());
@@ -281,8 +309,8 @@ public class Main {
                 }
             }
             art.setCuerpo70(caracter(art.getCuerpo()));
+            loadComentario(art);
             listArticulos.add(art);
-            System.out.println("tama;o"+listArticulos.size());
     }
 
     public static String caracter(String cuerpo){

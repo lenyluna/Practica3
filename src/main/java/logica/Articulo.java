@@ -15,6 +15,10 @@ public class Articulo {
     private ArrayList<Etiqueta> listaEtiqueta;
     private String cuerpo70;
 
+    public void setListaComentarios(ArrayList<Comentario> listaComentarios) {
+        this.listaComentarios = listaComentarios;
+    }
+
     public String getCuerpo70() {
         return cuerpo70;
     }
@@ -87,6 +91,9 @@ public class Articulo {
     public void addEtiqueta(Etiqueta et){
             listaEtiqueta.add(et);
 
+    }
+    public void addComentario(Comentario com){
+        listaComentarios.add(com);
     }
 }
 

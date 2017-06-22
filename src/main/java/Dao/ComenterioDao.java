@@ -2,6 +2,7 @@ package Dao;
 
 import logica.Articulo;
 import logica.Comentario;
+import logica.ComentarioDB;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -18,7 +19,7 @@ public class ComenterioDao {
         //subiendola en modo Embedded
         this.sql2o = new Sql2o("jdbc:h2:~/blog", "root", "");
         crearTabla();
-        //cargaDemo();
+        cargaDemo();
     }
 
     /**
@@ -42,30 +43,48 @@ public class ComenterioDao {
         }
     }
 
-    public List<Comentario> getAllComentarios() {
+    public List<ComentarioDB> getAllComentarios() {
         String sql = "select * from COMENTARIOS ";
         try (Connection con = sql2o.open()) {
-            return con.createQuery(sql).executeAndFetch(Comentario.class);
+            return con.createQuery(sql).executeAndFetch(ComentarioDB.class);
+        }
+    }
+
+    public List<ComentarioDB> getComentarioByArt(long art_id) {
+        String sql = "select * from COMENTARIOS where ARTICULO='"+art_id+"'";
+        try (Connection con = sql2o.open()) {
+             return con.createQuery(sql).executeAndFetch(ComentarioDB.class);
         }
     }
 
     public void crearDataDemo() {
-        String sql = "insert into ARTICULOS (TITULO, CUERPO, AUTOR, FECHA) values(:TITULO, :CUERPO, :AUTOR, :FECHA)";
+        String sql = "insert into COMENTARIOS(COMENTARIO,AUTOR,ARTICULO) values(:COMENTARIO, :AUTOR, :ARTICULO)";
         try (Connection con = sql2o.open()) {
 
             con.createQuery(sql)
-                    .addParameter("TITULO", "PRIMER POST")
-                    .addParameter("CUERPO", "ESTE ES EL PRIMER POST DEL BLOG")
-                    .addParameter("AUTOR", "zomgod")
-                    .addParameter("FECHA", "16/06/2017")
+                    .addParameter("COMENTARIO", "BUEN APORTE")
+                    .addParameter("AUTOR", "lenyluna")
+                    .addParameter("ARTICULO", 1)
                     .executeUpdate();
 
             con.createQuery(sql)
-                    .addParameter("TITULO", "SEGUNDO POST")
-                    .addParameter("CUERPO", "ESTE ES EL SEGUNDO POST DEL BLOG")
-                    .addParameter("AUTOR", "lenyluna")
-                    .addParameter("FECHA", "16/06/2017")
+                    .addParameter("COMENTARIO", "Interesante")
+                    .addParameter("AUTOR", "zomgod")
+                    .addParameter("ARTICULO", 2)
                     .executeUpdate();
+        }
+    }
+
+    public void createData(Comentario coment) {
+        String sql = "insert into COMENTARIOS(COMENTARIO,AUTOR,ARTICULO) values(:COMENTARIO, :AUTOR, :ARTICULO)";
+        try (Connection con = sql2o.open()) {
+
+            con.createQuery(sql)
+                    .addParameter("COMENTARIO", coment.getComentario())
+                    .addParameter("AUTOR", coment.getAutor().getUsername())
+                    .addParameter("ARTICULO", coment.getArticulo().getId())
+                    .executeUpdate();
+
         }
     }
 }

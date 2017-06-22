@@ -1,15 +1,15 @@
 package logica;
 
 /**
- * Created by Leny96 on 15/6/2017.
+ * Created by Leny96 on 22/6/2017.
  */
-public class Comentario {
+public class ComentarioDB {
     private long id;
     private String comentario;
-    private Usuario autor;
-    private Articulo articulo;
+    private String autor;
+    private long articulo;
 
-    public Comentario(String comentario, Usuario autor, Articulo articulo) {
+    public ComentarioDB(String comentario, String autor, long articulo) {
         this.id = id;
         this.comentario = comentario;
         this.autor = autor;
@@ -32,20 +32,19 @@ public class Comentario {
         this.comentario = comentario;
     }
 
-    public Usuario getAutor() {
+    public String getAutor() {
         return autor;
     }
 
-    public void setAutor(Usuario autor) {
+    public void setAutor(String autor) {
         this.autor = autor;
     }
 
-    public Articulo getArticulo() {
+    public long getArticulo() {
         return articulo;
     }
 
-    public void setArticulo(Articulo articulo) {
+    public void setArticulo(long articulo) {
         this.articulo = articulo;
     }
-
 }
