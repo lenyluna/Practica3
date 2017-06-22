@@ -59,6 +59,13 @@ public class Main {
             }
         });
 
+        Spark.before("/articulo/:id/comentario",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            if(user==null){
+                response.redirect("/");
+            }
+        });
+
 
         Spark.get("/", (request, response) -> {
             checkCOOKIES(request);
