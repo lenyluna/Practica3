@@ -13,9 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static spark.Spark.get;
-import static spark.Spark.redirect;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 /**
@@ -38,6 +36,30 @@ public class Main {
         configuration.setClassForTemplateLoading(Main.class, "/");
         List<Articulo> allArticulos = DBarticulos.getAllArticulos();
         loadRelacion(allArticulos);
+
+        Spark.before("/guardandoarticulo",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            if(user==null){
+                response.redirect("/");
+
+            }
+        });
+
+        Spark.before("/CrearArticulo/:username",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            if(user==null){
+                response.redirect("/");
+            }
+        });
+
+        Spark.before("/logout",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            if(user==null){
+                response.redirect("/");
+            }
+        });
+
+
         Spark.get("/", (request, response) -> {
             checkCOOKIES(request);
             StringWriter writer = new StringWriter();
@@ -59,7 +81,7 @@ public class Main {
             } catch (Exception e) {
                 System.out.println(e.toString());
                 e.printStackTrace();
-                Spark.halt(500);
+                halt(500);
             }
             return writer;
         });
@@ -214,6 +236,7 @@ public class Main {
             }
             return writer;
         });
+
         Spark.post("/articulo/:id/comentario",(request, response) ->{
             StringWriter writer = new StringWriter();
             String comentario = request.queryParams("comentario");
@@ -300,6 +323,7 @@ public class Main {
             art.addComentario(coment);
         }
     }
+
     private  static void loadRelacionByOne (Articulo art){
         List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
             art.setListaEtiqueta(new ArrayList<Etiqueta>());
@@ -324,6 +348,7 @@ public class Main {
         }
         return caracter70;
     }
+
     private static Articulo findArtById (long id){
         for (Articulo art: listArticulos) {
             if(art.getId()==id){
