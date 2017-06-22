@@ -52,7 +52,7 @@
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" method="post" action="/login/">
+                        <form class="modal-content animate" method="post" action="/login/-1">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close"
                                       title="Close Modal">&times;</span>
@@ -146,14 +146,19 @@
         <#list ListaArticulos as articulo>
             <!-- First Blog Post -->
             <h2>
-                <a href="#">${articulo.titulo}</a>
+                ${articulo.titulo}
             </h2>
             <p class="lead">
                 by <a href="index.php">${articulo.autor}</a>
             </p>
             <p><span class="glyphicon glyphicon-time"></span> Posted on ${articulo.fecha}</p>
-            <p>${articulo.cuerpo}</p>
-            <a class="btn btn-primary" href="#">Leer mas <span class="glyphicon glyphicon-chevron-right"></span></a>
+            <p>${articulo.cuerpo70} .......</p>
+            <p><b>Etiquetas del art&iacuteculo:</b>
+                <#list articulo.listaEtiqueta as etiqueta>
+                ${etiqueta.etiqueta},
+                </#list>
+            </p>
+            <a class="btn btn-primary" href="/articulo/${articulo.id}" >Leer mas <span class="glyphicon glyphicon-chevron-right"></span></a>
 
             <hr>
         </#list>

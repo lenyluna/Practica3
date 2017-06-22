@@ -1,28 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ULTRA BLOG</title>
+    <title>Post - ${articulo.titulo}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="/css/blog-home.css" rel="stylesheet">
-    <link href="/css/myCSS.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="/css/blog-post.css" rel="stylesheet">
+    <link href="/css/myCSS.css" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -48,11 +46,11 @@
                     <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
-                <#if login =="false">
+            <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" method="post" action="/login/-1">
+                        <form class="modal-content animate" method="post" action="/login/${articulo.id}">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close"
                                       title="Close Modal">&times;</span>
@@ -68,7 +66,7 @@
                             </div>
                             <div class="container2" style="background-color:#f1f1f1">
                                 <p align="center">
-                                   <button type="submit" class="btn btn-primary"><span
+                                    <button type="submit" class="btn btn-primary"><span
                                             class="glyphicon glyphicon-off"></span> Log In
                                     </button>
                                     <button type="button" onclick="document.getElementById('id01').style.display='none'"
@@ -115,13 +113,13 @@
 
                     </div>
                 </li>
-                </#if>
-                <#if login == "true">
+            </#if>
+            <#if login == "true">
                 <li >
-                 <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
+                    <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
 
                 </li>
-                </#if>
+            </#if>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -134,37 +132,112 @@
 
     <div class="row">
 
-        <!-- Blog Entries Column -->
-        <div class="col-md-8">
+        <!-- Blog Post Content Column -->
+        <div class="col-lg-8">
 
-            <h1 class="page-header">
-                Entradas
-                <small>Todas las entradas del blog hasta la fecha</small>
-            </h1>
+            <!-- Blog Post -->
 
+            <!-- Title -->
+            <h1> ${articulo.titulo}</h1>
 
-        <#list ListaArticulos as articulo>
-            <!-- First Blog Post -->
-            <h2>
-                ${articulo.titulo}
-            </h2>
+            <!-- Author -->
             <p class="lead">
-                by <a href="index.php">${articulo.autor}</a>
+                by <a href="#">${articulo.autor}</a>
             </p>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on ${articulo.fecha}</p>
-            <p>${articulo.cuerpo70} .......</p>
-            <p><b>Etiquetas del art&iacuteculo:</b>
-                <#list articulo.listaEtiqueta as etiqueta>
-                ${etiqueta.etiqueta},
-                </#list>
-            </p>
-            <a class="btn btn-primary" href="/articulo/${articulo.id}" >Leer mas <span class="glyphicon glyphicon-chevron-right"></span></a>
 
             <hr>
-        </#list>
+
+            <!-- Date/Time -->
+            <p><span class="glyphicon glyphicon-time"></span> Posted on ${articulo.fecha}</p>
+
+            <hr>
+
+            <!-- Post Content -->
+            <p class="lead">${articulo.cuerpo}</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
+
+            <hr>
+
+            <!-- Blog Comments -->
+
+            <!-- Comments Form -->
+            <div class="well">
+                <h4>Comentarios:</h4>
+                <form role="form">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- Posted Comments -->
+
+            <!-- Comment -->
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">Start Bootstrap
+                        <small>August 25, 2014 at 9:30 PM</small>
+                    </h4>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">Start Bootstrap
+                        <small>August 25, 2014 at 9:30 PM</small>
+                    </h4>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                    <!-- Nested Comment -->
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">Nested Start Bootstrap
+                                <small>August 25, 2014 at 9:30 PM</small>
+                            </h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                    <!-- End Nested Comment -->
+                </div>
+            </div>
 
         </div>
 
+        <!-- Blog Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+            <!-- Blog Categories Well -->
+            <div class="well">
+                <h4>Etiquetas del art&iacuteculo:</h4>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled">
+                        <#list listEti as etiqueta>
+                            <li><a href="#"> ${etiqueta.etiqueta}</a>
+                            </li>
+                        </#list>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
 
     </div>
     <!-- /.row -->
@@ -173,18 +246,21 @@
 
     <!-- Footer -->
     <footer>
-        <div class="row" align="center">
-            <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12" align="center">
                 <p>Copyright &copy;</p>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
     </footer>
+
 </div>
-<!-- jQuery-->
-<script src="/js/jquery.js"></script>
+<!-- /.container -->
+
+<!-- jQuery -->
+<script src="js/jquery.js"></script>
 <script src="/js/myJquery.js"></script>
+
 </body>
 
 </html>

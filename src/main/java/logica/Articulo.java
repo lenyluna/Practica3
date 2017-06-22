@@ -13,6 +13,15 @@ public class Articulo {
     private String fecha;
     private ArrayList<Comentario> listaComentarios;
     private ArrayList<Etiqueta> listaEtiqueta;
+    private String cuerpo70;
+
+    public String getCuerpo70() {
+        return cuerpo70;
+    }
+
+    public void setCuerpo70(String cuerpo70) {
+        this.cuerpo70 = cuerpo70;
+    }
 
     public Articulo(String titulo, String cuerpo, String autor, String fecha) {
         this.id = id;
@@ -22,6 +31,7 @@ public class Articulo {
         this.fecha = fecha;
         this.listaComentarios = new ArrayList<Comentario>();
         this.listaEtiqueta = new ArrayList<Etiqueta>();
+        this.cuerpo70 = cuerpo70;
     }
 
     public ArrayList<Comentario> getListaComentarios() {
@@ -78,6 +88,5 @@ public class Articulo {
             listaEtiqueta.add(et);
 
     }
-
 }
 

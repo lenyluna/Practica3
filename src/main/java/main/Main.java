@@ -31,24 +31,24 @@ public class Main {
     static ArticuloDao DBarticulos = new ArticuloDao();
     static ComenterioDao DBcomentario = new ComenterioDao();
     static ArticuloDaoEtiqueta DBartEti = new ArticuloDaoEtiqueta();
-
+    static ArrayList<Articulo> listArticulos = new ArrayList<>();
     //http://localhost:4567
     public static void main(String[] args) {
 
         staticFileLocation("/publico");
         final Configuration configuration = new Configuration(new Version(2, 3, 0));
         configuration.setClassForTemplateLoading(Main.class, "/");
-
+        List<Articulo> allArticulos = DBarticulos.getAllArticulos();
+        loadRelacion(allArticulos);
         Spark.get("/", (request, response) -> {
             checkCOOKIES(request);
             StringWriter writer = new StringWriter();
-            List<Articulo> allArticulos = DBarticulos.getAllArticulos();
-            loadRelacion(allArticulos);
-            System.out.println("prueba"+allArticulos.get(2).getListaEtiqueta().size());
             try {
                 Template formTemplate = configuration.getTemplate("templates/index.ftl");
                 Map<String, Object> map = new HashMap<>();
-                map.put("ListaArticulos", allArticulos);
+                ArrayList<Articulo> listArtClone = (ArrayList<Articulo>) listArticulos.clone();
+                Collections.reverse(listArtClone);
+                map.put("ListaArticulos",listArtClone);
 
                 Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
                 if(user==null){
@@ -66,10 +66,10 @@ public class Main {
             return writer;
         });
 
-        Spark.post("/login/", (request, response) -> {
+        Spark.post("/login/:ubicar", (request, response) -> {
             StringWriter writer = new StringWriter();
             List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
-            List<Articulo> allArticulos = DBarticulos.getAllArticulos();
+          //  List<Articulo> allArticulos = DBarticulos.getAllArticulos();
             try {
                 String username = request.queryParams("username") != null ? request.queryParams("username") : "anonymous";
                 String password = request.queryParams("password") != null ? request.queryParams("password") : "unknown";
@@ -84,7 +84,7 @@ public class Main {
                     System.out.println("NINGUN USUARIO CON ESA COBINACION DE PARAMETROS ");
                    Template formTemplate = configuration.getTemplate("templates/ventanaLogin.ftl");
                     Map<String, Object> map = new HashMap<>();
-                    map.put("ListaArticulos", allArticulos);
+                    map.put("ListaArticulos", listArticulos);
                     map.put("login", "false");
                     map.put("cargando", "true");
                     map.put("username",username);
@@ -94,7 +94,12 @@ public class Main {
                     System.out.println("LOGEADO CON EXITO");
                     response.cookie(COOKIE_NAME,username,3600);
                     request.session().attribute(SESSION_NAME,username);
-                    response.redirect("/");
+                    if(Long.parseLong(request.params("ubicar"))!=-1){
+                        response.redirect("/articulo/"+Long.parseLong(request.params("ubicar")));
+                    }else {
+                        response.redirect("/");
+                    }
+
                 }
 
             } catch (Exception e) {
@@ -150,7 +155,6 @@ public class Main {
         });
 
         Spark.post("/guardandoarticulo",(request, response) -> {
-            List<Articulo> allArticulos = DBarticulos.getAllArticulos();
             String titulo = request.queryParams("titulo");
             String cuerpo = request.queryParams("cuerpo");
             Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
@@ -180,11 +184,36 @@ public class Main {
                for(Etiqueta et : art.getListaEtiqueta()){
                     DBartEti.createRelacion(et.getId(),art.getId());
                 }
+                loadRelacionByOne(art);
             }catch (Exception e){
                 e.printStackTrace();
             }
             response.redirect("/");
             return null;
+        });
+
+        Spark.get("/articulo/:id",(request, response) -> {
+            StringWriter writer = new StringWriter();
+            long id = Long.parseLong(request.params("id"));
+            Usuario user = finUser(request.session().attribute(SESSION_NAME),DBusuarios);
+            Articulo art = findArtById(id);
+            try{
+                Template formTemplate = configuration.getTemplate("templates/vistaArticulo.ftl");
+            Map<String, Object> map = new HashMap<>();
+            map.put("articulo",art);
+            map.put("listEti",art.getListaEtiqueta());
+                if(user==null){
+                    map.put("login", "false");
+                }else {
+                    map.put("login", "true");
+                    map.put("username",user.getUsername());
+                }
+            formTemplate.process(map, writer);
+            }   catch (Exception e) {
+                e.printStackTrace();
+                response.redirect("/");
+            }
+            return writer;
         });
 
     }
@@ -237,10 +266,44 @@ public class Main {
                     art.getListaEtiqueta().add(findEtiById(rel.getId_Eti()));
                 }
             }
-
+            art.setCuerpo70(caracter(art.getCuerpo()));
+            listArticulos.add(art);
+            System.out.println("tama;o"+listArticulos.size());
         }
     }
 
+    private  static void loadRelacionByOne (Articulo art){
+        List<RelacionEti_Art> allRelacion = DBartEti.getAllRelacionEti_Art();
+            art.setListaEtiqueta(new ArrayList<Etiqueta>());
+            for (RelacionEti_Art rel : allRelacion) {
+                if(rel.getId_Art()==art.getId()){
+                    art.getListaEtiqueta().add(findEtiById(rel.getId_Eti()));
+                }
+            }
+            art.setCuerpo70(caracter(art.getCuerpo()));
+            listArticulos.add(art);
+            System.out.println("tama;o"+listArticulos.size());
+    }
+
+    public static String caracter(String cuerpo){
+        String caracter70 = "";
+        if(cuerpo.length()<=70){
+           caracter70=cuerpo;
+        }else {
+            for (int i = 0; i < 70; i++) {
+                caracter70 += cuerpo.charAt(i);
+            }
+        }
+        return caracter70;
+    }
+    private static Articulo findArtById (long id){
+        for (Articulo art: listArticulos) {
+            if(art.getId()==id){
+                return art;
+            }
+        }
+        return null;
+    }
 
 
 
