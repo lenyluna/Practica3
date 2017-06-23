@@ -29,6 +29,8 @@ public class Main {
     static ArticuloDaoEtiqueta DBartEti = new ArticuloDaoEtiqueta();
     static ArrayList<Articulo> listArticulos = new ArrayList<>();
     //http://localhost:4567
+
+
     public static void main(String[] args) {
 
         staticFileLocation("/publico");
@@ -63,6 +65,7 @@ public class Main {
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
             if(!user.isAdministrador()){
                 System.out.println(user.isAdministrador());
+                halt(401, "No tiene permisos para realizar esta operacion! <a href='http://localhost:4567' >Volver al inicio </a>");
                 response.redirect("/");
             }
         });
