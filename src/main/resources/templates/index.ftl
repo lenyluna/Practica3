@@ -43,11 +43,10 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-            <#if login == "true">
+
                 <li>
-                    <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/" >Nuevo Art&iacuteculo</a>
                 </li>
-            </#if>
                 <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>

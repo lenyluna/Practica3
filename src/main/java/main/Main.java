@@ -45,24 +45,18 @@ public class Main {
             }
         });
 
-        Spark.before("/CrearArticulo/:username",(request, response) -> {
+        Spark.before("/CrearArticulo/",(request, response) -> {
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
             if(user==null){
                 response.redirect("/");
             }
         });
 
-        Spark.before("/logout",(request, response) -> {
-            Usuario user = finUser(request.session().attribute(SESSION_NAME));
-            if(user==null){
-                response.redirect("/");
-            }
-        });
 
         Spark.before("/articulo/:id/comentario",(request, response) -> {
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
             if(user==null){
-                response.redirect("/");
+                response.redirect("/articulo/"+Long.parseLong(request.params("id")));
             }
         });
 
@@ -115,6 +109,9 @@ public class Main {
                     map.put("login", "false");
                     map.put("cargando", "true");
                     map.put("username",username);
+                    if(Long.parseLong(request.params("ubicar"))!=-1){
+                        response.redirect("/articulo/"+Long.parseLong(request.params("ubicar")));
+                    }
                     formTemplate.process(map, writer);
 
                 } else {
@@ -170,12 +167,12 @@ public class Main {
             return null;
         });
 
-        Spark.get("/CrearArticulo/:username",(request, response) -> {
+        Spark.get("/CrearArticulo/",(request, response) -> {
             StringWriter writer = new StringWriter();
-            String username = request.params("username");
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
             Template formTemplate = configuration.getTemplate("templates/crearArticulo.ftl");
             Map<String, Object> map = new HashMap<>();
-            map.put("username",username);
+            map.put("username",user.getUsername());
             map.put("login", "true");
             formTemplate.process(map, writer);
             return writer;
@@ -250,14 +247,36 @@ public class Main {
             long id = Long.parseLong(request.params("id"));
             Articulo art =findArtById (id);
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
-            Comentario com = new Comentario(comentario,user,art);
-            art.addComentario(com);
+            if(user!=null) {
+                Comentario com = new Comentario(comentario, user, art);
+                art.addComentario(com);
+                try {
+                    DBcomentario.createData(com);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            response.redirect("/articulo/"+id);
+            return null;
+        });
+
+        Spark.get("/articulo/:id/EliminarArt",(request, response) ->{
+            long id = Long.parseLong(request.params("id"));
+            Articulo art =findArtById (id);
             try {
-                DBcomentario.createData(com);
+                DBcomentario.removeComent(art.getId());
+                DBartEti.removeRelacion(art.getId());
+                for (Etiqueta eti : art.getListaEtiqueta()) {
+                  if(DBartEti.getRelacionByEti(eti.getId()).size()==0){
+                   DBetiqueta.removeEtiqueta(eti.getId());
+                  }
+                }
+                DBarticulos.removeArticulo(art.getId());
+                listArticulos.remove(art);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            response.redirect("/articulo/"+id);
+            response.redirect("/");
             return null;
         });
 

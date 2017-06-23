@@ -43,16 +43,15 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-            <#if login == "true">
+
                 <li>
-                    <a href="/nuevoArticulo" >Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/" >Nuevo Art&iacuteculo</a>
                 </li>
-            </#if>
             <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
                     <div id="id01" class="modal">
-                        <form class="modal-content animate" method="post" action="/login/">
+                        <form class="modal-content animate" method="post" action="/login/-1">
                             <div class="imgcontainer">
                                 <span onclick="document.getElementById('id01').style.display='none'" class="close"
                                       title="Close Modal">&times;</span>

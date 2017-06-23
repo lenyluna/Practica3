@@ -87,4 +87,11 @@ public class ComenterioDao {
 
         }
     }
+
+    public void removeComent(long id){
+        String sql = "DELETE FROM COMENTARIOS WHERE ARTICULO='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
+        }
+    }
 }

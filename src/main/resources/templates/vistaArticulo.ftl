@@ -43,7 +43,7 @@
                 </li>
             <#if login == "true">
                 <li>
-                    <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/" >Nuevo Art&iacuteculo</a>
                 </li>
             </#if>
             <#if login =="false">
@@ -115,9 +115,10 @@
                 </li>
             </#if>
             <#if login == "true">
+                <li><a href="#">Modificar</a></li>
+                <li><a href="/articulo/${articulo.id}/EliminarArt">Eliminar</a></li>
                 <li >
-                    <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
-
+                    <p style="color: white; padding-top: 15px; padding-left: 400px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
                 </li>
             </#if>
             </ul>

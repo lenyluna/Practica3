@@ -66,6 +66,16 @@ public class ArticuloDaoEtiqueta{
         }
     }
 
+    public List<RelacionEti_Art> getRelacionByEti(long id){
+        String sql = "select * from ETIQUETA_ART where ID_ETI='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql).executeAndFetch(RelacionEti_Art.class);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void createRelacion(long idEti, long idArt){
         String sql ="INSERT INTO ETIQUETA_ART(ID_ART,ID_ETI) VALUES (:ID_ART,:ID_ETI)";
@@ -74,6 +84,13 @@ public class ArticuloDaoEtiqueta{
                     .addParameter("ID_ETI",idEti)
                     .addParameter("ID_ART",idArt)
                     .executeUpdate();
+        }
+    }
+
+    public void removeRelacion(long id){
+        String sql = "DELETE FROM ETIQUETA_ART WHERE ID_ART='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
         }
     }
 }
