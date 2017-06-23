@@ -66,6 +66,13 @@ public class Main {
             }
         });
 
+        Spark.before("/signup/",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            if(user==null){
+                response.redirect("/");
+            }
+        });
+
 
         Spark.get("/", (request, response) -> {
             checkCOOKIES(request);
@@ -135,7 +142,7 @@ public class Main {
             return writer;
         });
 
-        Spark.get("/signup/", (request, response) -> {
+        Spark.post("/signup/", (request, response) -> {
             StringWriter writer = new StringWriter();
             boolean adm = false;
             boolean aut = false;
@@ -144,8 +151,8 @@ public class Main {
                 String username = request.queryParams("username") != null ? request.queryParams("username") : "anonymous";
                 String password = request.queryParams("password") != null ? request.queryParams("password") : "unknown";
                 String nombre = request.queryParams("nombre") != null ? request.queryParams("nombre") : "unknown";
-                String administrador = request.queryParams("administrador") != null ? request.queryParams("administrador") : "unknown";
-                String autor = request.queryParams("autor") != null ? request.queryParams("autor") : "unknown";
+                String administrador = request.queryParams("administrador") != null ? request.queryParams("administrador") : "false";
+                String autor = request.queryParams("autor") != null ? request.queryParams("autor") : "false";
 
                 if (administrador.equals("on")) {
                     adm = true;
@@ -155,10 +162,12 @@ public class Main {
                 }
 
                 DBusuarios.createUsuario(new Usuario(username, nombre, password, adm, aut));
+                System.out.println(administrador + " " + autor + " " + nombre + " " + username + " " + password);
                 response.redirect("/");
-                System.out.println(administrador + " " + autor);
+
 
             } catch (Exception e) {
+                e.printStackTrace();
                 response.redirect("/");
             }
             return writer;
@@ -190,30 +199,35 @@ public class Main {
             Articulo art = new Articulo(titulo, cuerpo, user.getUsername(),format.format(date).toString());
             String etiqueta[] = request.queryParams("etiqueta").split(",");
 
-           for(int i=0;i<etiqueta.length;i++){
-                Etiqueta et = findEtiqueta(etiqueta[i]);
-                if(et==null){
-                    Etiqueta et2 = new Etiqueta(-1,etiqueta[i]);
-                    try {
-                        DBetiqueta.crearEtiqueta(et2.getEtiqueta());
-                        et2.setId(DBetiqueta.lastEtiq());
-                        art.addEtiqueta(et2);
-                    }catch (Exception e){
-                        e.printStackTrace();
+            if(!existe_articulo(titulo)) {
+
+
+                for (int i = 0; i < etiqueta.length; i++) {
+                    Etiqueta et = findEtiqueta(etiqueta[i]);
+                    if (et == null) {
+                        Etiqueta et2 = new Etiqueta(-1, etiqueta[i]);
+                        try {
+                            DBetiqueta.crearEtiqueta(et2.getEtiqueta());
+                            et2.setId(DBetiqueta.lastEtiq());
+                            art.addEtiqueta(et2);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        art.addEtiqueta(et);
                     }
-                }else {
-                    art.addEtiqueta(et);
                 }
-            }
-            try {
-                DBarticulos.createArticulo(art);
-                art.setId(DBarticulos.lastArt());
-               for(Etiqueta et : art.getListaEtiqueta()){
-                    DBartEti.createRelacion(et.getId(),art.getId());
+                try {
+                    DBarticulos.createArticulo(art);
+                    art.setId(DBarticulos.lastArt());
+                    for (Etiqueta et : art.getListaEtiqueta()) {
+                        DBartEti.createRelacion(et.getId(), art.getId());
+                    }
+                    loadRelacionByOne(art);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                loadRelacionByOne(art);
-            }catch (Exception e){
-                e.printStackTrace();
+
             }
             response.redirect("/");
             return null;
@@ -273,7 +287,6 @@ public class Main {
             }
         }
     }
-
 
     private static Usuario finUser(String username){
         List<Usuario> allUsuarios = DBusuarios.getAllUsuarios();
@@ -363,6 +376,16 @@ public class Main {
             }
         }
         return null;
+    }
+
+    private static boolean existe_articulo (String titulo){
+
+        for (Articulo art: listArticulos) {
+            if(art.getTitulo()== titulo){
+                return true;
+            }
+        }
+        return false;
     }
 
 

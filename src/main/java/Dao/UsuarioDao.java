@@ -56,8 +56,13 @@ public class UsuarioDao {
                 + "VALUES(:USERNAME,:NOMBRE,:PASSWORD,:ADMINISTRADOR,:AUTOR);";
 
         try (Connection con = sql2o.open()) {
-            con.createQuery(sql).bind(user
-            ).executeUpdate();
+            con.createQuery(sql)
+                    .addParameter("USERNAME", user.getUsername())
+                    .addParameter("NOMBRE", user.getNombre())
+                    .addParameter("PASSWORD", user.getPassword())
+                    .addParameter("ADMINISTRADOR", user.isAdministrador())
+                    .addParameter("AUTOR", user.isAutor())
+                    .executeUpdate();
         }
     }
 
