@@ -96,4 +96,11 @@ public class ArticuloDao {
         long id=getAllArticulos().get(getAllArticulos().size()-1).getId();
         return id;
     }
+
+    public void removeArticulo(long id){
+        String sql = "DELETE FROM ARTICULOS WHERE ID='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
+        }
+    }
 }

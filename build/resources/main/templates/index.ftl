@@ -43,11 +43,10 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-            <#if login == "true">
+
                 <li>
-                    <a href="/CrearArticulo/${username}" >Nuevo Art&iacuteculo</a>
+                    <a href="/CrearArticulo/" >Nuevo Art&iacuteculo</a>
                 </li>
-            </#if>
                 <#if login =="false">
                 <li>
                     <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Log in</a>
@@ -80,6 +79,7 @@
                         </form>
                     </div>
                 </li>
+                </#if>
                 <li>
                     <a onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Sign up</a>
                     <div id="id02" class="modal">
@@ -115,7 +115,6 @@
 
                     </div>
                 </li>
-                </#if>
                 <#if login == "true">
                 <li >
                  <p style="color: white; padding-top: 15px; padding-left: 500px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>

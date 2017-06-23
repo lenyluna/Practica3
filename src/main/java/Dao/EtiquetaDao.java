@@ -73,4 +73,13 @@ public class EtiquetaDao {
         long id=getAllEtiquetas().get(getAllEtiquetas().size()-1).getId();
         return id;
     }
+
+    public void removeEtiqueta(long id){
+        String sql = "DELETE FROM ETIQUETAS WHERE ID='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
+        }
+    }
+
+
 }
