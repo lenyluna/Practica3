@@ -52,7 +52,6 @@ public class Main {
             }
         });
 
-
         Spark.before("/articulo/:id/comentario",(request, response) -> {
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
             if(user==null){
@@ -62,7 +61,8 @@ public class Main {
 
         Spark.before("/signup/",(request, response) -> {
             Usuario user = finUser(request.session().attribute(SESSION_NAME));
-            if(user==null){
+            if(!user.isAdministrador()){
+                System.out.println(user.isAdministrador());
                 response.redirect("/");
             }
         });
