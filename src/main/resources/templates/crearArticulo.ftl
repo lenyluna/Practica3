@@ -98,19 +98,37 @@
 <div class="container">
         <div class="col-md-8">
             <h1 class="page-header">
+                <#if modificar=="false">
                 Crear nuevo Art&iacuteculo
+                <#else>
+                    Modificar Art&iacuteculo
+                </#if>
             </h1>
             <br/>
 
-            <form method="post" action="/guardandoarticulo">
+
+                <#if modificar == "false">
+                <form method="post" action="/guardandoarticulo">
                <input type="text" class="form-control" placeholder="Título" name="titulo"></input><br/>
                 <textarea class="form-control" rows="10" placeholder="Cuerpo" style="resize: none;" name="cuerpo"></textarea><br/>
                 <input type="text" class="form-control" placeholder="Etiquetas" name="etiqueta"></input><br/>
-                 <p align="right">
-                     <button type="submit" class="btn btn-primary" align="center"><span class="glyphicon glyphicon-send"></span> Send</button>
-                     <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
-                 </p>
-            </form>
+                <p align="right">
+                    <button type="submit" class="btn btn-primary" align="center"><span class="glyphicon glyphicon-send"></span> Send</button>
+                    <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </p>  </form>
+                <#else >
+                <form method="post" action="/articulo/${id}/ModificarArt/guardar">
+                        <input type="text" class="form-control" placeholder="Título" name="titulo" value="${Titulo1}"></input><br/>
+                        <textarea class="form-control" rows="10" placeholder="Cuerpo" style="resize: none;" name="cuerpo">${Cuerpo1}</textarea><br/>
+                        <input type="text" class="form-control" placeholder="Etiquetas" name="etiqueta" value="${eti1}"></input><br/>
+                    <p align="right">
+                        <button type="submit" class="btn btn-primary" align="center"><span class="glyphicon glyphicon-send"></span> Send</button>
+                        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                    </p>
+                </form>
+                </#if>
+
+
         </div>
     </div>
 </div>

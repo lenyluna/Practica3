@@ -103,4 +103,11 @@ public class ArticuloDao {
             con.createQuery(sql).executeUpdate();
         }
     }
+
+    public void modifyArt(long id, String titulo , String cuerpo){
+        String sql= "UPDATE ARTICULOS SET TITULO='"+titulo+"',CUERPO='"+cuerpo+"' where ID='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
+        }
+    }
 }

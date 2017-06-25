@@ -81,5 +81,11 @@ public class EtiquetaDao {
         }
     }
 
+    public void modifyEtiqueta(long id, String name){
+        String sql = "UPDATE ETIQUETAS SET NOMBRE ='"+name+"' where ID='"+id+"'";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql).executeUpdate();
+        }
+    }
 
 }

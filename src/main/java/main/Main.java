@@ -70,6 +70,14 @@ public class Main {
             }
         });
 
+        Spark.before("/articulo/:id/ModificarArt",(request, response) -> {
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            Articulo art =findArtById(Long.parseLong(request.params("id")));
+             if(!user.isAdministrador() && !(art.getAutor().equalsIgnoreCase(user.getUsername()))){
+                 response.redirect("/articulo/"+Long.parseLong(request.params("id")));
+            }
+        });
+
 
         Spark.get("/", (request, response) -> {
             checkCOOKIES(request);
@@ -186,6 +194,7 @@ public class Main {
             Map<String, Object> map = new HashMap<>();
             map.put("username",user.getUsername());
             map.put("login", "true");
+            map.put("modificar","false");
             formTemplate.process(map, writer);
             return writer;
         });
@@ -228,6 +237,8 @@ public class Main {
                     e.printStackTrace();
                 }
 
+            }else {
+                halt(401, "Ya existe un articulo con este titulo! <a href='/CrearArticulo/' >Volver al atras </a>");
             }
             response.redirect("/");
             return null;
@@ -294,6 +305,36 @@ public class Main {
                 e.printStackTrace();
             }
             response.redirect("/");
+            return null;
+        });
+
+        Spark.get("/articulo/:id/ModificarArt",(request,response)->{
+            StringWriter writer = new StringWriter();
+            long id = Long.parseLong(request.params("id"));
+            Usuario user = finUser(request.session().attribute(SESSION_NAME));
+            Articulo art = findArtById(id);
+            Template formTemplate = configuration.getTemplate("templates/crearArticulo.ftl");
+            Map<String, Object> map = new HashMap<>();
+            map.put("username",user.getUsername());
+            map.put("login", "true");
+            map.put("modificar","true");
+            map.put("Titulo1",art.getTitulo());
+            map.put("Cuerpo1",art.getCuerpo());
+            map.put("eti1",etiqueta(art.getListaEtiqueta()));
+            map.put("id",id);
+            formTemplate.process(map, writer);
+            return writer;
+        });
+
+        Spark.post("/articulo/:id/ModificarArt/guardar",(request, response) -> {
+            long id = Long.parseLong(request.params("id"));
+            Articulo art = findArtById(id);
+            art.setTitulo(request.queryParams("titulo"));
+            art.setCuerpo(request.queryParams("cuerpo"));
+            String etiqueta[] = request.queryParams("etiqueta").split(",");
+            modifyEti(etiqueta,art);
+            DBarticulos.modifyArt(id,art.getTitulo(),art.getCuerpo());
+            response.redirect("/articulo/"+id);
             return null;
         });
 
@@ -403,14 +444,49 @@ public class Main {
     private static boolean existe_articulo (String titulo){
 
         for (Articulo art: listArticulos) {
-            if(art.getTitulo()== titulo){
+            if(art.getTitulo().equalsIgnoreCase(titulo)){
                 return true;
             }
         }
         return false;
     }
 
+    private static String etiqueta(ArrayList<Etiqueta> listEti){
+        String allEtiqueta="";
+        for(int i=0;i<listEti.size();i++){
+            allEtiqueta+=listEti.get(i).getEtiqueta();
+            if(i!=listEti.size()-1){
+                allEtiqueta+=",";
+            }
+        }
+        return allEtiqueta;
+    }
 
-
-
+    private static void modifyEti(String etiqueta[],Articulo art){
+        for(int i=0;i<etiqueta.length;i++){
+            if(i<art.getListaEtiqueta().size()) {
+                if (!etiqueta[i].equalsIgnoreCase(art.getListaEtiqueta().get(i).getEtiqueta())) {
+                    DBetiqueta.modifyEtiqueta(art.getListaEtiqueta().get(i).getId(), etiqueta[i]);
+                    art.getListaEtiqueta().get(i).setEtiqueta(etiqueta[i]);
+                }
+            }else if (i>art.getListaEtiqueta().size()-1){
+                Etiqueta et = findEtiqueta(etiqueta[i]);
+                if (et == null) {
+                    Etiqueta et2 = new Etiqueta(-1, etiqueta[i]);
+                    et=et2;
+                    try {
+                        DBetiqueta.crearEtiqueta(et2.getEtiqueta());
+                        et2.setId(DBetiqueta.lastEtiq());
+                        art.addEtiqueta(et2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    art.addEtiqueta(et);
+                }
+                DBartEti.createRelacion(et.getId(),art.getId());
+                loadRelacionByOne(art);
+            }
+        }
+    }
 }

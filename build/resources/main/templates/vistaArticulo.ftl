@@ -115,7 +115,7 @@
                 </li>
             </#if>
             <#if login == "true">
-                <li><a href="#">Modificar</a></li>
+                <li><a href="/articulo/${articulo.id}/ModificarArt">Modificar</a></li>
                 <li><a href="/articulo/${articulo.id}/EliminarArt">Eliminar</a></li>
                 <li >
                     <p style="color: white; padding-top: 15px; padding-left: 400px" >WELCOME ${username},<b><a href="/logout" style="color: white;"> log out</a> </b></p>
